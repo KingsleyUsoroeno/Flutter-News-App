@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "610544382162",
+    "firebase_url": "https://flutter-news-app-37d2e.firebaseio.com",
+    "project_id": "flutter-news-app-37d2e",
+    "storage_bucket": "flutter-news-app-37d2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610544382162:android:9bd3fb1404119207cabd0b",
+        "android_client_info": {
+          "package_name": "com.kingtech.flutter_news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610544382162-l3f450i5bllj2vndq95kvsp0kvu98p9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqaj2_voTBLcMLK0dMwlDx6AJuvJj3Uuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610544382162-l3f450i5bllj2vndq95kvsp0kvu98p9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
