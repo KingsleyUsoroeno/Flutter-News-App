@@ -6,6 +6,7 @@ abstract class AuthenticationState extends Equatable {
   AuthenticationState([List props = const []]) : super(props);
 }
 
+/*State of the App when nothing is happening*/
 class Initial extends AuthenticationState {
   @override
   String toString() => 'Uninitialized';
@@ -26,6 +27,12 @@ class Authenticated extends AuthenticationState {
 }
 
 class Unauthenticated extends AuthenticationState {
+  final String authenticationError; // optional field
+
+  Unauthenticated({this.authenticationError});
+
   @override
-  String toString() => 'Unauthenticated';
+  String toString() {
+    return 'Unauthenticated{authenticationError: $authenticationError}';
+  }
 }

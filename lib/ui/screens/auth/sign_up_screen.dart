@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_news_app/data/auth/bloc/auth_bloc.dart';
-import 'package:flutter_news_app/data/auth/bloc/auth_event.dart';
-import 'package:flutter_news_app/data/auth/bloc/auth_state.dart';
-import 'package:flutter_news_app/data/auth/bloc/model/user.dart';
+import 'package:flutter_news_app/data/bloc/auth/auth_bloc.dart';
+import 'package:flutter_news_app/data/bloc/auth/auth_event.dart';
+import 'package:flutter_news_app/data/bloc/auth/auth_state.dart';
+import 'package:flutter_news_app/data/bloc/auth/model/user.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -21,10 +21,10 @@ class SignUpScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20.0),
-            height: MediaQuery.of(context).size.height,
+        body: Container(
+          padding: EdgeInsets.only(left: 20, right: 20.0),
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
@@ -75,7 +75,12 @@ class SignUpScreen extends StatelessWidget {
                     textInputAction: TextInputAction.done,
                     obscureText: true,
                     // ignore: missing_return
-                    validator: (String password) {},
+                    validator: (String confirmPass) {
+                      if (confirmPass.isEmpty) {
+                        return "please reconfirm your password";
+                      } else
+                        return null;
+                    },
                   ),
                   SizedBox(height: 25.0),
                   BlocConsumer<AuthenticationBloc, AuthenticationState>(
@@ -83,6 +88,12 @@ class SignUpScreen extends StatelessWidget {
                     listener: (BuildContext context, AuthenticationState state) {
                       if (state is Authenticated) {
                         Navigator.pushReplacementNamed(context, "news_list");
+                      } else if (state is Unauthenticated) {
+                        // something interrupted the sign up process or already existing credentials were provided
+                        print("login error occurred ${state.authenticationError}");
+                        final snackBar = SnackBar(content: Text('Failed to sign you up please check your credentials and try again'));
+                        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+                        Scaffold.of(context).showSnackBar(snackBar);
                       }
                     },
                     builder: (context, state) {
@@ -92,7 +103,7 @@ class SignUpScreen extends StatelessWidget {
                           height: 50.0,
                           child: MaterialButton(
                             elevation: 4.0,
-                            onPressed: () => _signUp(authenticationBloc),
+                            onPressed: () => _signUp(context, authenticationBloc),
                             color: Color(0xff44A6FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0),
@@ -134,19 +145,20 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  void _signUp(AuthenticationBloc bloc) {
+  void _signUp(BuildContext context, AuthenticationBloc bloc) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       String email = _emailEditingController.text.toString();
       String password = _passwordEditingController.text.toString();
-      String confirmPassword = _passwordEditingController.text.toString();
+      String confirmPassword = _confirmPasswordEditingController.text.toString();
 
       if (password == confirmPassword) {
         print("email is $email and password is $password");
         bloc.add(SignUpEvent(user: User(email: email, password: password)));
       } else {
-        print("passwords dont match");
-        return;
+        final snackBar = SnackBar(content: Text('passwords dont match'));
+        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+        Scaffold.of(context).showSnackBar(snackBar);
       }
     }
   }

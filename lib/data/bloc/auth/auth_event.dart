@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_news_app/data/auth/bloc/model/user.dart';
 import 'package:meta/meta.dart';
+
+import 'model/user.dart';
 
 @immutable
 abstract class AuthenticationEvent extends Equatable {

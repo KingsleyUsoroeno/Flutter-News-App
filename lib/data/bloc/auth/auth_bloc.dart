@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_news_app/data/auth/bloc/model/user.dart';
-import 'package:flutter_news_app/data/authentication_service.dart';
+import 'package:flutter_news_app/data/service/authentication_service.dart';
 import 'package:meta/meta.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';
+import 'model/user.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationService _authenticationService;
@@ -57,9 +57,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         yield Authenticated(currentUser.user.email);
       } else {
         yield Unauthenticated();
+        yield Initial();
       }
     } catch (e) {
-      yield Unauthenticated();
+      yield Unauthenticated(authenticationError: e.toString());
+      yield Initial();
     }
   }
 
@@ -72,9 +74,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         yield Authenticated(currentUser.user.email);
       } else {
         yield Unauthenticated();
+        yield Initial();
       }
     } catch (e) {
-      yield Unauthenticated();
+      yield Unauthenticated(authenticationError: e.toString());
+      yield Initial();
     }
   }
 
