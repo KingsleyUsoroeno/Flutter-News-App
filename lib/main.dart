@@ -7,6 +7,7 @@ import 'package:flutter_news_app/data/bloc/news/repo/news_repository.dart';
 import 'package:flutter_news_app/ui/screens/auth/login_screen.dart';
 import 'package:flutter_news_app/ui/screens/auth/sign_up_screen.dart';
 import 'package:flutter_news_app/ui/screens/home/home_screen.dart';
+import 'package:flutter_news_app/ui/screens/news_detail/news_detail.dart';
 
 import 'file:///C:/Users/user/AndroidStudioProjects/flutter_news_app/lib/ui/screens/news_list/news_list_screen.dart';
 
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
           "sign_up": (_) => SignUpScreen(),
           "home": (_) => HomeScreen(),
           "login": (_) => LoginScreen(),
-          "news_list": (_) => NewsListScreen()
+          "news_list": (_) => NewsListScreen(),
+          NewsDetailScreen.routeName: (_) => NewsDetailScreen()
         },
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {

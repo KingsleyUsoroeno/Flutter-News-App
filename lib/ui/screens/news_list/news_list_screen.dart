@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_news_app/constants.dart';
 import 'package:flutter_news_app/data/bloc/news/bloc/news_bloc.dart';
 import 'package:flutter_news_app/data/bloc/news/bloc/news_event.dart';
 import 'package:flutter_news_app/data/bloc/news/bloc/news_state.dart';
 import 'package:flutter_news_app/data/bloc/news/news.dart';
+import 'package:flutter_news_app/ui/screens/news_detail/news_detail.dart';
 
 class NewsListScreen extends StatefulWidget {
+  static const routeName = '/news_list';
+
   @override
   _NewsListScreenState createState() => _NewsListScreenState();
 }
@@ -16,7 +20,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<NewsBloc>(context)
-      ..add(FetchNews(query: "bitcoin", from: "2020-08-07", sortBy: "publishedAt", apiKey: "ca4ae9f450a44a39bd7b77f9a8745450"));
+      ..add(FetchNews(query: "bitcoin", from: "2020-08-09", sortBy: "publishedAt", apiKey: Constants.API_KEY));
   }
 
   @override
@@ -53,18 +57,48 @@ class _NewsListScreenState extends State<NewsListScreen> {
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
-                        article.urlToImage,
+                        article.urlToImage ?? Constants.DEFAULT_IMAGE_URL,
                         height: 150.0,
                         width: 100.0,
                       ),
                     ),
                     title: Text(article.title ?? "Title is not available"),
                     subtitle: Text(article.description ?? "Description is not available"),
+                    onTap: () {
+                      Navigator.pushNamed(context, NewsDetailScreen.routeName, arguments: article);
+                    },
                   );
                 },
               );
             } else if (state is NewsEmpty) {
-              return Container();
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Failed to fetch your news please retry again'),
+                    SizedBox(height: 10.0),
+                    SizedBox(
+                      width: 250,
+                      height: 50.0,
+                      child: MaterialButton(
+                        elevation: 4.0,
+                        onPressed: () => {
+                          BlocProvider.of<NewsBloc>(context)
+                            ..add(FetchNews(query: "bitcoin", from: "2020-08-09", sortBy: "publishedAt", apiKey: Constants.API_KEY))
+                        },
+                        color: Color(0xff44A6FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                        ),
+                        child: Text(
+                          'Retry',
+                          style: TextStyle(color: Colors.white, fontSize: 17.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             } else
               return Container();
           },

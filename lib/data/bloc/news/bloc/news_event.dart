@@ -19,17 +19,3 @@ class FetchNews extends NewsEvent {
     return 'FetchNews{query: $query, from: $from, sortBy: $sortBy, apiKey: $apiKey}';
   }
 }
-
-class RefreshNews extends NewsEvent {
-  final String query;
-  final String from;
-  final String sortBy;
-  final String apiKey;
-
-  RefreshNews({this.query, this.from, this.sortBy, this.apiKey});
-
-  @override
-  String toString() {
-    return 'FetchNews{query: $query, from: $from, sortBy: $sortBy, apiKey: $apiKey}';
-  }
-}

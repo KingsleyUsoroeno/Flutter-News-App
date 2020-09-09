@@ -18,8 +18,6 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   Stream<NewsState> mapEventToState(NewsEvent event) async* {
     if (event is FetchNews) {
       yield* _mapFetchNewsToState(query: event.query, from: event.from, sortBy: event.sortBy, apiKey: event.apiKey);
-    } else if (event is RefreshNews) {
-      yield* _mapFetchNewsToState(query: event.query, from: event.from, sortBy: event.sortBy, apiKey: event.apiKey);
     }
   }
 
