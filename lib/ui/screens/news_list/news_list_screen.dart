@@ -19,8 +19,9 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   void initState() {
     super.initState();
+    /*Replace from date with todays date or else the Api will throw an error saying you are trying to request news that is too far back in the past*/
     BlocProvider.of<NewsBloc>(context)
-      ..add(FetchNews(query: "bitcoin", from: "2020-08-09", sortBy: "publishedAt", apiKey: Constants.API_KEY));
+      ..add(FetchNews(query: "bitcoin", from: "2020-08-11", sortBy: "publishedAt", apiKey: Constants.API_KEY));
   }
 
   @override
@@ -48,19 +49,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
             if (state is NewsLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is NewsLoaded) {
-              return ListView.builder(
+              return ListView.separated(
                 itemCount: state.news.articles != null ? state.news.articles.length : 0,
                 itemBuilder: (context, int index) {
                   final Articles article = state.news.articles[index];
                   return ListTile(
                     contentPadding: EdgeInsets.all(0.0),
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        article.urlToImage ?? Constants.DEFAULT_IMAGE_URL,
-                        height: 150.0,
-                        width: 100.0,
-                      ),
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(article.urlToImage ?? Constants.DEFAULT_IMAGE_URL),
+                      radius: 50.0,
                     ),
                     title: Text(article.title ?? "Title is not available"),
                     subtitle: Text(article.description ?? "Description is not available"),
@@ -68,6 +65,9 @@ class _NewsListScreenState extends State<NewsListScreen> {
                       Navigator.pushNamed(context, NewsDetailScreen.routeName, arguments: article);
                     },
                   );
+                },
+                separatorBuilder: (context, int index) {
+                  return Divider();
                 },
               );
             } else if (state is NewsEmpty) {
@@ -84,7 +84,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         elevation: 4.0,
                         onPressed: () => {
                           BlocProvider.of<NewsBloc>(context)
-                            ..add(FetchNews(query: "bitcoin", from: "2020-08-09", sortBy: "publishedAt", apiKey: Constants.API_KEY))
+                            ..add(FetchNews(query: "bitcoin", from: "2020-08-11", sortBy: "publishedAt", apiKey: Constants.API_KEY))
                         },
                         color: Color(0xff44A6FF),
                         shape: RoundedRectangleBorder(
